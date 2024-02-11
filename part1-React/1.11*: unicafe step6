@@ -91,7 +91,7 @@ const App = (props) => {
                 <Statistics handleClick={handleNeutral} name="neutral" value={neutral} />
                 <Statistics handleClick={handleBad} name="bad" value={bad} />
 
-                No feedback Given
+                <p> No feedback Given</p>
             </div>
         )
     }
