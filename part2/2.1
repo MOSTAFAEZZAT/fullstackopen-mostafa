@@ -6,11 +6,15 @@ const Course = ({ course }) => {
       <h1>{course.name}</h1>
       {
         course.parts.map(part => (
-          <p key={part.id}> {part.name}</p>
+          <p key={part.id}> {part.name} {part.exercises}</p>
         ))
       }
     </div >
   )
+}
+
+
+const Header = ({ course }) => {
 
 }
 const App = () => {
