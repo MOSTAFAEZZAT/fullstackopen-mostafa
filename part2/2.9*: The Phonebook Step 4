@@ -38,8 +38,7 @@ const App = () => {
 
   const handleNameFilter = (event) => {
 
-    setFilter(event.target.value);
-
+    setFilter(event.target.value)
     if (event.target.value.length === 0) {
       setFilteredPerson({});
       setFilter("");
