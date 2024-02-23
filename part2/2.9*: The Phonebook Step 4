@@ -44,8 +44,8 @@ const App = () => {
       setFilter("");
     } else {
       const filterdValueByName = persons.filter(person => {
-        if (person.name.includes(filter)) {
-          console.log('name', person.name, filter)
+        if (person.name.includes(event.target.value)) {
+          console.log('name', person.name, event.target.value)
           setFilteredPerson(person);
           console.log('FilteredPerson', person, filteredPerson);
         }
