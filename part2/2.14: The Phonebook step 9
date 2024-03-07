@@ -58,29 +58,52 @@ const App = () => {
   )
 
   const submitNewPerson = (event) => {
+
     event.preventDefault();
     const newPerson = { name, number };
 
-    const check = persons.map((person) => {
-      if (person.name === newPerson.name || person.number === newPerson.number) {
-        return true
+    const existingPerson = persons.find(person => person.name === newPerson.name);
+
+    if (existingPerson) {
+      if (existingPerson.number !== newPerson.number) {
+        const confirm = window.confirm(`${existingPerson.name} is already added to phonebook, replace the old number with a new one?`)
+        if (confirm) {
+          const updatedPerson = { ...existingPerson, number: newPerson.number };
+          console.log('exist ', existingPerson)
+          phonebook.updatePhonenumber(existingPerson.id, updatedPerson)
+            .then(response => {
+              setPersons(persons.map(person =>
+                person.id === existingPerson.id ? response.data : person
+              ));
+            }).catch(err => {
+              console.error("Failed to update phone number:", err);
+            });
+        }
+      } else {
+        alert(`The phone number for ${newPerson.name} is already up to date.`);
       }
-      else { return false }
-    })
-    if (check.includes(true)) {
-      alert(` ${newPerson.name} or ${newPerson.number} + is already added to phonebook`)
     } else {
-
-      phonebook.addNewPerson(newPerson).then(response => {
-        setPersons(persons.concat(response.data));
-      })
-
+      phonebook.addNewPerson(newPerson)
+        .then(response => {
+          console.log("New person added:", response.data);
+          setPersons(persons.concat(response.data));
+        }).catch(err => {
+          console.error("Failed to add new person:", err);
+        });
     }
 
   }
 
   const handleDelete = (id, name) => {
-    if (window.confirm(`Delete ${name}?`)) { phonebook.deletePerson(id); }
+    if (window.confirm(`Delete ${name}?`)) {
+      phonebook.deletePerson(id)
+        .then(response => {
+          phonebook.getAll()
+            .then(response => {
+              setPersons(response.data);
+            })
+        });
+    }
   }
 
   const handleNameFilter = (event) => {
