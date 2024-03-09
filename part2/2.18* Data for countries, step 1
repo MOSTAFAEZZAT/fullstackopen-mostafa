@@ -97,7 +97,7 @@ const App = () => {
         </form>
         {
           countryList.map(country => <div>
-            <p key={crypto.randomUUID()}>{country.name.common} <button onClick={() => { onShow(country.name.common) }}>show</button></p>
+            <p key={crypto.randomUUID()}>{country.name.common}</p>
           </div>)
         }
         {countriesLimit}
