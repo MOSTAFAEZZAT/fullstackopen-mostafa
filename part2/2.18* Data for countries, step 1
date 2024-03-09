@@ -3,7 +3,7 @@ import axios from 'axios'
 import phonebook from './services/phonebook'
 import './index.css'
 import Notification from './components/Notification'
-
+import countries from './services/countries'
 
 const App = () => {
 
@@ -16,7 +16,7 @@ const App = () => {
 
   useEffect(() => {
 
-    axios.get('https://studies.cs.helsinki.fi/restcountries/api/all')
+    countries.getAllCountries()
       .then(response => {
         setCountryData(response.data)
       })
@@ -36,32 +36,22 @@ const App = () => {
     console.log('countriesLimit', countriesLimit)
   }, [countriesLimit])
 
-  const onShow = (country) => {
-    console.log('test', country);
-  }
-  const onSearch = (country) => {
-    console.log(country);
-
-  }
   const handleSearch = (event) => {
     setCountry(event.target.value);
     setSpecificCountry({});
 
     const filteredCountries = countryData.filter(country => country.name.common.toLowerCase().includes(event.target.value.toLowerCase()));
-    console.log('countryName', countryName, filteredCountries)
     setCountryList(filteredCountries);
 
     if (filteredCountries.length === 1) {
-      axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${filteredCountries[0].name.common}`)
+      countries.getSpecificCountry(`${filteredCountries[0].name.common}`)
         .then(response => {
-          console.log(response.data);
           setCountryList([]);
           setCountriesLimit("")
           setSpecificCountry(response.data);
         })
     }
     else if (filteredCountries.length > 10) {
-      console.log('countryList greater than 10')
       setCountryList([]);
       setCountriesLimit("Too much matches, specify another filter")
     } else {
@@ -97,7 +87,7 @@ const App = () => {
         </form>
         {
           countryList.map(country => <div>
-            <p key={crypto.randomUUID()}>{country.name.common}</p>
+            <p key={crypto.randomUUID()}>{country.name.common} <button onClick={() => { onShow(country.name.common) }}>show</button></p>
           </div>)
         }
         {countriesLimit}
