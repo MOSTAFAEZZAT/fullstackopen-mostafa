@@ -23,18 +23,16 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-
-    console.log('countryName', countryName)
   }, [countryName])
-
   useEffect(() => {
 
-    console.log('countryList', countryList)
-  }, [countryList])
-  useEffect(() => {
+   }, [countryList])  useEffect(() => {
 
-    console.log('countriesLimit', countriesLimit)
-  }, [countriesLimit])
+   }, [countriesLimit])
+
+  const onSearch = (event) => {
+    event.preventDefault();
+  }
 
   const handleSearch = (event) => {
     setCountry(event.target.value);
