@@ -47,9 +47,16 @@ const App = () => {
   }
 
   const handleSearch = (event) => {
+
+    const value = event.target.value;
     setCountry(event.target.value);
     setSpecificCountry({});
-    setSpecificCountry([{}]);
+    setCountryList([]);
+
+    if (value.trim() === "") {
+      setCountriesLimit(null);
+      return;
+    }
 
     const filteredCountries = countryData.filter(country => country.name.common.toLowerCase().includes(event.target.value.toLowerCase()));
     setCountryList(filteredCountries);
@@ -68,7 +75,7 @@ const App = () => {
         })
     }
 
-    else if (filteredCountries.length) {
+    else if (filteredCountries.length > 10) {
       setCountryList([]);
       setCountriesLimit("Too much matches, specify another filter")
     } else {
@@ -101,7 +108,7 @@ const App = () => {
       </div >
     )
   }
-  else if (countriesLimit !== "" || countryList.length < 10) {
+  else if (countriesLimit !== null || countryList.length < 10) {
     return (
       <div>
         <form onSubmit={onSearch}>
