@@ -1,11 +1,12 @@
-GET http://localhost:3001/api/notes
+GET http://localhost:3001/api/persons
 ###
-POST http://localhost:3001/api/notes
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "content":"Hi there!",
-    "important": false 
+    "name":"Liisa",
+    "number" :"39-885545845"
+    
 }
 
 ###

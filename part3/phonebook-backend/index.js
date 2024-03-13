@@ -1,7 +1,10 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan');
+const cors = require('cors')
 
 app.use(express.json())
+app.use(cors())
 
 let persons = [
     {
@@ -26,11 +29,33 @@ let persons = [
     }
 ]
 
+
 function getRandomInt() {
     const minCeiled = Math.ceil(5);
     const maxFloored = Math.floor(1000);
     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
 }
+
+
+const requestLogger = (request, response, next) => {
+    console.log('Method:', request.method)
+    console.log('Path:  ', request.path)
+    console.log('Body:  ', request.body)
+    console.log('---')
+    next()
+}
+app.use(requestLogger)
+
+app.use(morgan(function (tokens, req, res) {
+    return [
+        JSON.stringify(req.body),
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'), '-',
+        tokens['response-time'](req, res), 'ms'
+    ].join(' ')
+}))
 
 app.post('/api/persons', (request, response) => {
 
@@ -78,7 +103,14 @@ app.get('/api/info', (request, respoense) => {
     respoense.send(`<p>Phonebook has info for ${persons.length} people</p> ${currentDataTime}`)
 })
 
-const PORT = 3001
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
