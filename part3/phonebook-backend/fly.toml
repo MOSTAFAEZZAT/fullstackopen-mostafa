@@ -9,7 +9,7 @@ primary_region = 'cdg'
 [build]
 
 [env]
-  PORT = "3000" # add this
+  PORT = "3000" 
 
 [deploy]
 --smoke-checks=false
