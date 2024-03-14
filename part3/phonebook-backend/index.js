@@ -72,12 +72,13 @@ app.post('/api/persons', (request, response) => {
 
     const id = getRandomInt()
     const newPhonebook = {
-        name: body.cotent,
+        name: body.name,
         number: body.number,
         id: id
     }
     newPhonebook.id = id;
-    persons.concat(newPhonebook);
+    console.log(newPhonebook);
+    persons = persons.concat(newPhonebook);
     response.status(200).json(newPhonebook)
 
 })
