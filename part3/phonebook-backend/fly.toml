@@ -1,18 +1,15 @@
-# fly.toml app configuration file generated for phonebook-backend-mostafa on 2024-03-13T14:59:00+02:00
+# fly.toml app configuration file generated for phonebook-backend-test on 2024-03-14T13:11:39+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'phonebook-backend-mostafa'
+app = 'phonebook-backend-test'
 primary_region = 'cdg'
 
 [build]
 
 [env]
-  PORT = "3000" 
-
-[deploy]
---smoke-checks=false
+  PORT = '3000'
 
 [http_service]
   internal_port = 3000

@@ -1,6 +1,6 @@
-/.git
-/node_modules
-.dockerignore
-.env
-Dockerfile
-fly.toml
+# flyctl launch added from part3\phonebook-backend\.gitignore
+part3\phonebook-backend\node_modules
+part3\phonebook-backend\**\.dockerignore
+part3\phonebook-backend\**\.env
+part3\phonebook-backend\**\Dockerfile
+part3\phonebook-backend\**\fly.toml
