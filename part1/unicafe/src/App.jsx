@@ -1,66 +1,95 @@
-import React from "react"
-
-const course = 'Half Stack application development'
-const part1 = 'Fundamentals of React'
-const exercises1 = 10
-const part2 = 'Using props to pass data'
-const exercises2 = 7
-const part3 = 'State of a component'
-const exercises3 = 14
-
-const Header = (props) => {
-  return (
-    <h1> {props.course}</h1>
-  )
-
-}
+import { useState } from 'react'
 
 
-const Content = (props) => {
+const Statistics = (props) => {
+
   return (
     <>
-      <Part part={part1} exercises={exercises1} />
-      <Part part={part2} exercises={exercises2} />
-      <Part part={part3} exercises={exercises3} />
+      <div style={{ display: "inline-flex" }}>
+        <button onClick={props.handleClick}>{props.name}  </button>
 
-    </>
-  )
 
+      </div >
+    </>)
 }
 
+const App = (props) => {
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  const [avgScore, setAvgScore] = useState([])
+  const [totalAvgScore, setTotalAvgScore] = useState(0)
 
-const Part = (props) => {
+  const handleGood = () => {
+    avgScore.push(1);
+    setAvgScore(avgScore);
+    setTotalAvgScore(totalAvgScore + 1)
+    setGood(good + 1);
+    console.log(totalAvgScore)
+  }
+  const handleNeutral = () => {
+    avgScore.push(0);
+    setAvgScore(avgScore);
+    setTotalAvgScore(totalAvgScore + 0)
+    setNeutral(neutral + 1);
+  }
 
-  return (
+  const handleBad = () => {
+    avgScore.push(-1);
+    setAvgScore(avgScore);
+    setTotalAvgScore(totalAvgScore - 1)
+    setBad(bad + 1)
 
-    <p> {props.part} {props.exercises}</p>
+  }
+  if (avgScore.length > 0) {
+    return (
+      <div>
+        <h1>Give Feedback</h1>
+        <Statistics handleClick={handleGood} name="good" value={good} />
+        <Statistics handleClick={handleNeutral} name="neutral" value={neutral} />
+        <Statistics handleClick={handleBad} name="bad" value={bad} />
+
+        <h1>Statistics</h1>
+        <table>
+
+          <tr>   good
+            <td>{good}</td>
+          </tr>
+          <tr>   neutral
+            <td>{neutral}</td>
+          </tr>
+
+          <tr>   bad
+            <td>{bad}</td>
+          </tr>
+          <tr>   all
+            <td> {avgScore.length}</td>
+          </tr>
+          <tr>   average
+            <td>{totalAvgScore / avgScore.length}</td>
+          </tr>
+          <tr>   positive
+            <td> {good / avgScore.length}%</td>
+          </tr>
+
+        </table>
+      </div>
 
 
-  )
-}
-const Total = (props) => {
-  return (
+    )
+  } else {
+    return (
+      <div>
+        <h1>Give Feedback</h1>
+        <Statistics handleClick={handleGood} name="good" value={good} />
+        <Statistics handleClick={handleNeutral} name="neutral" value={neutral} />
+        <Statistics handleClick={handleBad} name="bad" value={bad} />
 
-    <p>Number of exercises {props.total} </p>
-
-  )
-
-}
-
-const App = () => {
-
-
-  return (
-    <div>
-      <Header course={course} />
-      <Content part1={part1} exercises1={exercises1}
-        part2={part2} exercises2={exercises2}
-        part3={part3} exercises3={exercises3}
-      />
-      <Total total={exercises1 + exercises2 + exercises3} />
-
-    </div>
-  )
+        <p> No feedback Given</p>
+      </div>
+    )
+  }
 }
 
 export default App
