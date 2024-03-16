@@ -1,17 +1,27 @@
 const express = require('express')
 const app = express()
-const morgan = require('morgan');
-const cors = require('cors')
+const morgan = require('morgan')
 
 app.use(express.json())
-app.use(cors())
-app.use(express.static('dist'))
+app.use(express.static("dist"))
+
+app.use(morgan(function (tokens, req, res) {
+    return [
+        JSON.stringify(req.body),
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'), '-',
+        tokens['response-time'](req, res), 'ms'
+    ].join(' ')
+}))
 
 let persons = [
     {
         "id": 1,
         "name": "Arto Hellas",
         "number": "040-123456"
+
     },
     {
         "id": 2,
@@ -30,65 +40,48 @@ let persons = [
     }
 ]
 
-
-function getRandomInt() {
-    const minCeiled = Math.ceil(5);
-    const maxFloored = Math.floor(1000);
-    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+const generateId = () => {
+    const maxId = persons.length > 0
+        ? Math.max(...persons.map(n => n.id))
+        : 0
+    return maxId + 1
 }
 
+app.get('/api/persons/:id', (request, response) => {
 
-const requestLogger = (request, response, next) => {
-    console.log('Method:', request.method)
-    console.log('Path:  ', request.path)
-    console.log('Body:  ', request.body)
-    console.log('---')
-    next()
-}
-app.use(requestLogger)
-
-app.use(morgan(function (tokens, req, res) {
-    return [
-        JSON.stringify(req.body),
-        tokens.method(req, res),
-        tokens.url(req, res),
-        tokens.status(req, res),
-        tokens.res(req, res, 'content-length'), '-',
-        tokens['response-time'](req, res), 'ms'
-    ].join(' ')
-}))
+    const id = Number(request.params.id)
+    const person = persons.find(person => person.id === id)
+    if (person) {
+        response.json(person)
+    }
+    else {
+        response.status(404).end()
+    }
+})
 
 app.post('/api/persons', (request, response) => {
+    const body = request.body
 
-    const body = request.body;
-    const duplicateName = persons.find(person => person.name === body.name)
-    if (!body.number || !body.name) {
-        return response.status(400).json({ error: 'name or number is missing' })
+    if (!body.content) {
+        return response.status(400).json({
+            error: 'content missing'
+        })
+    }
+    const person = {
+        content: body.content,
+        important: Boolean(body.important) || false,
+        id: generateId(),
     }
 
-    if (duplicateName) {
-        return response.status(400).json({ error: 'name must be unique' })
-    }
+    persons = persons.concat(person)
 
-    const id = getRandomInt()
-    const newPhonebook = {
-        name: body.name,
-        number: body.number,
-        id: id
-    }
-    newPhonebook.id = id;
-    console.log(newPhonebook);
-    persons = persons.concat(newPhonebook);
-    response.status(200).json(newPhonebook)
-
+    response.json(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-
-    const id = Number(request.params.id);
-    const person = persons.filter(person => id !== person.id);
+    const id = Number(request.params.id)
+    persons = persons.filter(person => person.id !== id)
     response.status(204).end()
-
 })
 
 app.get('/', (request, response) => {
@@ -99,20 +92,8 @@ app.get('/api/persons', (request, response) => {
     response.end(JSON.stringify(persons))
 })
 
-app.get('/api/info', (request, respoense) => {
 
-    const currentDataTime = new Date();
-    respoense.send(`<p>Phonebook has info for ${persons.length} people</p> ${currentDataTime}`)
-})
-
-
-const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(unknownEndpoint)
-
-const PORT = process.env.PORT || 3001
+const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })

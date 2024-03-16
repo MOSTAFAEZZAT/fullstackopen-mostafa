@@ -1,0 +1,7 @@
+POST https://phonebook-backend-test.fly.dev/api/persons
+Content-Type: application/json 
+
+{
+    "name":"Liisa",
+    "number": "39-9595485121"
+}
