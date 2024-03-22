@@ -1,2 +1,0 @@
-GET https://phonebook-backend-test.fly.dev/api/persons
-Content-Type: application/json 

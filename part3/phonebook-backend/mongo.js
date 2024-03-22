@@ -1,15 +1,6 @@
 const mongoose = require('mongoose')
-require('dotenv').config()
-
-
-if (process.argv.length < 3) {
-    console.log('give password as argument', process.argv)
-    process.exit(1)
-}
 
 const password = process.argv[2]
-
-const url = `mongodb+srv://mostafa:${password}@cluster0.fw4cqlv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery', false)
 
@@ -42,4 +33,4 @@ if (process.argv.length === 3) {
         console.log('phonebook saved!')
         mongoose.connection.close()
     })
-}
+} 

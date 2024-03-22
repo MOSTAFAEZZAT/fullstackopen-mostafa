@@ -1,6 +1,0 @@
-DELETE https://phonebook-backend-test.fly.dev/api/persons/`${id}`
-Content-Type: application/json 
-
-{
-    "id":2
-}
