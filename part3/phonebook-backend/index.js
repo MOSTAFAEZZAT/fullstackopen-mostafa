@@ -17,7 +17,7 @@ app.use(morgan(function (tokens, req, res) {
 
 
 app.use(express.json())
-app.use(express.static("../phonebook-backend/dist"))
+app.use(express.static("dist"))
 
 
 let persons = [
