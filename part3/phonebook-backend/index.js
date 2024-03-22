@@ -4,9 +4,6 @@ const app = express()
 const morgan = require('morgan')
 const Note = require('./models/note')
 
-app.use(express.json())
-app.use(express.static("dist"))
-
 app.use(morgan(function (tokens, req, res) {
     return [
         JSON.stringify(req.body),
@@ -17,6 +14,11 @@ app.use(morgan(function (tokens, req, res) {
         tokens['response-time'](req, res), 'ms'
     ].join(' ')
 }))
+
+
+app.use(express.json())
+app.use(express.static("../phonebook-backend/dist"))
+
 
 let persons = [
     {
