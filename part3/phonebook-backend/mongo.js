@@ -18,7 +18,6 @@ const phonebook = new Person({
     number: process.argv[4],
 })
 
-
 if (process.argv.length === 3) {
     console.log('give password as argument', process.argv)
 

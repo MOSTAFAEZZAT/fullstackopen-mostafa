@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const Note = require('./models/note')
+const Person = require('./models/person')
 
 app.use(morgan(function (tokens, req, res) {
     return [
@@ -15,10 +16,8 @@ app.use(morgan(function (tokens, req, res) {
     ].join(' ')
 }))
 
-
 app.use(express.json())
 app.use(express.static("dist"))
-
 
 let persons = [
     {
@@ -54,9 +53,11 @@ const generateId = () => {
 app.get('/api/persons/:id', (request, response) => {
 
     const id = Number(request.params.id)
+    Person.findById(id).then(person => {
+        response.json(person)
+    })
     const person = persons.find(person => person.id === id)
     if (person) {
-        response.json(person)
     }
     else {
         response.status(404).end()
@@ -66,18 +67,19 @@ app.get('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    if (!body.content) {
+    if (!body.name || !body.number) {
         return response.status(400).json({
-            error: 'content missing'
+            error: 'name or number missing'
         })
     }
-    const person = {
-        content: body.content,
-        important: Boolean(body.important) || false,
+    const person = new Person({
+        name: body.name,
+        number: body.number,
         id: generateId(),
-    }
-    persons = persons.concat(person)
-    response.json(person)
+    })
+    person.save().then(savePerson => {
+        response.json(savePerson)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -86,12 +88,29 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
-app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
+app.get('/api/persons', (request, response) => {
+    Person.find({}).then(persons => {
+        response.json(persons)
+    })
 })
 
-app.get('/api/persons', (request, response) => {
-    response.end(JSON.stringify(persons))
+app.post('/api/notes', (request, response) => {
+    const body = request.body
+    if (body.content === undefined) {
+        return response.status(400).json({ error: 'content missing' })
+    }
+    const note = new Note({
+        content: body.content,
+        important: body.important || false,
+    })
+
+    note.save().then(savedNote => {
+        response.json(savedNote)
+    })
+})
+
+app.get('/', (request, response) => {
+    response.send('<h1>Hello World!</h1>')
 })
 
 const PORT = process.env.PORT || 3001
