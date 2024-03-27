@@ -14,7 +14,7 @@
     "deploy:full": "npm run build:ui && npm run deploy",
     "logs:prod": "fly logs"
   },
-  "author": "",
+  "author": "mostafa",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
