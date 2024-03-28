@@ -66,8 +66,15 @@ const App = () => {
 
     const newPerson = { name, number };
     const existingPerson = persons.find(person => person.name === newPerson.name);
+    vaildatePerson(existingPerson, newPerson);
+
+
+  }
+
+  const vaildatePerson = (existingPerson, newPerson) => {
 
     if (existingPerson) {
+
       if (existingPerson.number !== newPerson.number) {
         const confirm = window.confirm(`${existingPerson.name} is already added to phonebook, replace the old number with a new one?`)
         if (confirm) {
@@ -83,7 +90,8 @@ const App = () => {
               console.error("Failed to update phone number:", err);
             });
         }
-      } else {
+      }
+      else {
         alert(`The phone number for ${newPerson.name} is already up to date.`);
       }
     } else {
@@ -95,12 +103,14 @@ const App = () => {
           setTimeout(() => {
             setSucessMessage(null)
           }, 2000);
-        }).catch(err => {
-          console.error("Failed to add new person:", err);
+        }).catch(error => {
+          console.error("Failed to add new person:", error);
+          console.log(error.response.data.error)
+          seterrorMessage(error.response.data.error)
         });
     }
-
   }
+
 
   const handleDelete = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
