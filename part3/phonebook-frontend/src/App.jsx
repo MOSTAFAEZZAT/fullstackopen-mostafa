@@ -67,8 +67,6 @@ const App = () => {
     const newPerson = { name, number };
     const existingPerson = persons.find(person => person.name === newPerson.name);
     vaildatePerson(existingPerson, newPerson);
-
-
   }
 
   const vaildatePerson = (existingPerson, newPerson) => {
@@ -111,12 +109,14 @@ const App = () => {
     }
   }
 
-
   const handleDelete = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
       phonebook.deletePerson(id)
         .then(response => {
-
+          phonebook.getAll()
+            .then(response => {
+              setPersons(response.data);
+            })
         }).catch(err => {
           console.log('fail', err)
           seterrorMessage(`Information of ${name} has already been removed from the server`)
