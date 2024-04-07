@@ -1,0 +1,15 @@
+DELETE https://phonebook-backend-test.fly.dev/api/persons/`${id}`
+Content-Type: application/json 
+
+{
+    "id":66003362619e38419c5ae9dc
+}
+
+###
+
+DELETE http://localhost:3000/api/persons/66003362619e38419c5ae9dc
+Content-Type: application/json 
+
+{
+    "id":"66003362619e38419c5ae9dc"
+}
