@@ -74,7 +74,7 @@ blogRouter.put('/:id', async (request, response) => {
   if(!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
-
+  console.log(request.body)
   const user = User.findById(decodedToken.id)
   const newBlog = {
     title: body.title,

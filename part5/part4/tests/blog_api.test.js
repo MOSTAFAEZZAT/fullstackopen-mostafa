@@ -63,10 +63,8 @@ describe('HTTP requests to the /api/blogs URL' , async () => {
       url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
       likes: 2,
     }
+    await api.post('/api/blogs').send(objBlog).expect('Content-Type',/application\/json/).expect(201)
 
-    const user = await api.post('/api/login').send({ username:'tessssst', password:'tessssst' })
-    const token = 'Bearer ' + user.body.token
-    await api.post('/api/blogs').set('Authorization' , token).send(objBlog).expect('Content-Type',/application\/json/).expect(201)
     const response = await api.get('/api/blogs')
     const author = response.body.map(blog => blog.author)
     assert.strictEqual(response.body.length, initialBlogs.length +1 )
@@ -84,9 +82,7 @@ describe('HTTP requests to the /api/blogs URL' , async () => {
     if(!checkBlogId){
       objBlog['likes'] = 0
     }
-    const user = await api.post('/api/login').send({ username:'tessssst', password:'tessssst' })
-    const token = 'Bearer ' + user.body.token
-    await api.post('/api/blogs').set('Authorization' , token).send(objBlog).expect(201).expect('Content-Type', /application\/json/)
+    await api.post('/api/blogs').send(objBlog).expect(201).expect('Content-Type', /application\/json/)
     const response = await api.get('/api/blogs')
     const checkLikes = response.body.map(blog => blog.likes)
     assert(!checkLikes.includes(undefined))
@@ -104,9 +100,7 @@ describe('HTTP requests to the /api/blogs URL' , async () => {
     if(!checkBlogId){
       objBlog['likes'] = 0
     }
-    const user = await api.post('/api/login').send({ username:'tessssst', password:'tessssst' })
-    const token = 'Bearer ' + user.body.token
-    await api.post('/api/blogs').set('Authorization', token).send(objBlog).expect(201).expect('Content-Type', /application\/json/)
+    await api.post('/api/blogs').send(objBlog).expect(201).expect('Content-Type', /application\/json/)
     const response = await api.get('/api/blogs')
     const checkLikes = response.body.map(blog => blog.likes)
     assert(!checkLikes.includes(undefined))
@@ -120,32 +114,17 @@ describe('HTTP requests to the /api/blogs URL' , async () => {
       author: 'Robert C. Martin',
       url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     }
-    const user = await api.post('/api/login').send({ username:'tessssst', password:'tessssst' })
-    const token = 'Bearer ' + user.body.token
-    await api.post('/api/blogs').set('Authorization', token).send(objBlog).expect(201).expect('Content-Type', /application\/json/)
+    await api.post('/api/blogs').send(objBlog).expect(201)
   })
 })
 
-describe('DELETE AND UPDATE a blog' , async () => {
+describe('DELETE AND UPDATE' , async () => {
   test('Delete a blog from database', async () => {
-    const user = await api.post('/api/login').send({ username: 'tessssst', password: 'tessssst' }).expect(200)
-    const token = 'Bearer ' + user.body.token
-  
-    // Create a new blog for the user
-    const newBlogResponse = await api.post('/api/blogs')
-      .set('Authorization', token)
-      .send({
-        title: 'New Blog',
-        author: 'Robert C. Martin',
-        url: 'http://example.com',
-        likes: 5
-      })
-      .expect(201)
-    const newBlogId = newBlogResponse.body.id
-    await api.delete(`/api/blogs/${newBlogId}`)
-      .set('Authorization', token)
-      .expect(204)
+    const id = initialBlogs[0].id
+    await api.delete(`/api/blogs/${id}`).expect(204)
   })
+  const user = await api.post('/api/login').send({ username:'tessssst', password:'tessssst' })
+  const token = 'Bearer ' + user.body.token 
   test('Update a blog from database', async () => {
     const blogs = await helper.getBlog()
     const id = blogs[0].id
@@ -158,9 +137,7 @@ describe('DELETE AND UPDATE a blog' , async () => {
       url: blogs[0].url,
       likes: updatedLikes,
     }
-    const user = await api.post('/api/login').send({ username:'tessssst', password:'tessssst' })
-    const token = 'Bearer ' + user.body.token
-    await api.put(`/api/blogs/${id}`).set('Authorization', token).send(newBlog).expect(204)
+    await api.put(`/api/blogs/${id}`).send(newBlog).set('Authorization', token).expect(204)
   })
 })
 
