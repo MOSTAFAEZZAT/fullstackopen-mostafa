@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { NEW_BOOK, BOOKS_QUERY } from '../queries'
+import { updateCache } from '../App'
 
 const style = { 
   margin: '10px',  
@@ -18,6 +19,10 @@ const NewBook = (props) => {
     onError: (error) => {
       console.log('error', error)
     },
+    update: (cache, { data }) => {
+    console.log('📝 mutation update, new book =', data.addBook.title)  // ← DIAGNOSTIC
+    updateCache(cache, { query: BOOKS_QUERY }, data.addBook)
+  },
   })
    
 
@@ -27,6 +32,7 @@ const NewBook = (props) => {
     console.log('add book...') 
     console.log(title, author, published, genres)
     addBook({ variables: { title, author, published: Number(published), genres } }) 
+    alert(`Book ${title} added`)
     setTitle('')
     setPublished('')
     setAuthor('')

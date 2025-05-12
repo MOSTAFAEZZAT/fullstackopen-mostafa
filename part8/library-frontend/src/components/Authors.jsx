@@ -51,9 +51,9 @@ const Authors = (props) => {
           </tr>
           {result.data.allAuthors.map((a) => (
             <tr key={a.name}>
-              <td>{a.name}</td>
-              <td>{a.born}</td>
-              <td>{a.bookCount}</td>
+              <td  style={{ padding: '5px' }}> {a.name}</td>
+              <td  style={{ padding: '5px' }}>{a.born}</td>
+              <td style={{ padding: '5px' }}>{a.bookCount}</td>
             </tr>
           ))}
         </tbody>
@@ -62,13 +62,14 @@ const Authors = (props) => {
         <form onSubmit={handleBirthYear}>
           <div>
           <select onChange={({ target }) => setName(target.value)}>
-          {result.data.allAuthors.map((a) => (
+          {
+          result.data.allAuthors.map((a) => (
             <option key={a.name} value={a.name}>{a.name}</option>
           ))}
           </select>
           </div>
-          <div>
-            born <input value={born}   onChange={({ target }) => setBorn(target.value)} />
+          <div  style={{ margin: '20px' }}>
+            born <input value={born} onChange={({ target }) => setBorn(target.value)} />
           </div>
           <button type="submit">update author</button>
         </form>

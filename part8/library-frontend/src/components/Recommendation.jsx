@@ -2,22 +2,22 @@ import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { BOOKS_QUERY } from '../queries'
 
-const Books = () => {
+const Books = ({favouriteGenre}) => {
   const [selectedGenre, setSelectedGenre] = useState(null)
   const result = useQuery(BOOKS_QUERY)
 
   if (result.loading) {
     return <div>loading...</div>
   }
-     console.log("books", result.data.allBooks)
 
-  const allBooks = result.data?.allBooks || []
+  const allBooks = result.data.allBooks
 
   const genres = [...new Set(allBooks.flatMap(book => book.genres))]
-  const filteredBooks = selectedGenre
-    ? allBooks.filter(book => book.genres.includes(selectedGenre))
+  console.log('genres', favouriteGenre)
+  const filteredBooks = favouriteGenre
+    ? allBooks.filter(book => book.genres.includes(favouriteGenre))
     : allBooks
- 
+
   return (
     <div>
       <h2>books</h2>
@@ -33,7 +33,7 @@ const Books = () => {
         </thead>
         <tbody>
           {filteredBooks.map((a) => (
-            <tr key={a.id}>
+            <tr key={a.title}>
               <td style={{ padding: '5px' }}>{a.title}</td>
               <td style={{ padding: '5px' }}>{a.author.name}</td>
               <td style={{ padding: '5px' }}>{a.published}</td>
@@ -44,15 +44,7 @@ const Books = () => {
 
       <div style={{ marginTop: '20px' }}>
         
-        {genres.map(genre => (
-          <button
-            key={genre}
-            onClick={() => setSelectedGenre(genre)}
-            style={{ marginRight: '5px' }}
-          >
-            {genre}
-          </button>
-        ))}
+ 
       </div>
     </div>
   )

@@ -19,4 +19,4 @@ const userSchema = new mongoose.Schema({
     ]
 });
 
-module.exports = mongoose.model('User', userSchema, 'users'); // 'users' is the name of the collection in the database. The third argument is optional and can be omitted if the collection name is the same as the model name.
+module.exports = mongoose.model('User', userSchema, 'users');

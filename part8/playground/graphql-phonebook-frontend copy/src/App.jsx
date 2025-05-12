@@ -6,6 +6,7 @@ import LoginForm from './components/LoginForm'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import PhoneForm from './components/PhoneForm'
+
 const App = () => {
   const [token, setToken] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -35,6 +36,7 @@ const App = () => {
   if (!token) {
     return (
       <>
+
         <Notify errorMessage={errorMessage} />
         <LoginForm setToken={setToken} setError={notify} />
       </>
