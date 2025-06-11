@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "outDir": "./build",                      // Compiled .js files will go here
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "types": ["eslint__js"],
+    "resolveJsonModule": true
+
+  },
+  "include": ["*.ts", "*.tsx", "**/*.ts", "**/*.tsx"],  // Include all TS files anywhere in project
+  "exclude": ["node_modules", "dist"]                   // Don't compile node_modules or output
+}
