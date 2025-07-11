@@ -11,3 +11,4 @@ Deployment: The application is deployed to a production environment or staging e
 2- GitLab, CIrcleCI and AWS CodePipeline.
 
 3- Cloud-based environment would be much better. Why? Our app is simple, and recently GItHub Actions for example has been more reliable than Jenkins, in terms of complexity and less-errors in deployment. The information that I need, it would be the size of the project that I'm building, complexity, how many people are familiar with the CI that we gonna use across the project. 
+1
