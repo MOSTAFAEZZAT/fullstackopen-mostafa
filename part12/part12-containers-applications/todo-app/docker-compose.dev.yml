@@ -1,0 +1,18 @@
+services:
+  app:
+    image: hello-front-dev
+    build:
+      context: ./todo-frontend
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3210:5173
+    container_name: hello-front-root
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx.dev.Dockerfile
+    ports:
+      - 8080:80
+    container_name: nginx-1
+    depends_on:
+      - app
