@@ -1,0 +1,23 @@
+Script started on 2025-08-06 18:56:42+00:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="96" LINES="23"]
+# ls
+bin   docker-entrypoint.d   home   media  proc	sbin  tmp	  var
+boot  docker-entrypoint.sh  lib    mnt	  root	srv   typescript
+dev   etc		    lib64  opt	  run	sys   usr
+# cd use
+sh: 2: cd: can't cd to use
+# cd usr
+# ls
+bin  games  include  lib  lib64  libexec  local  sbin  share  src
+# cd src
+# ls
+# ls
+# cd    cd app
+sh: 8: cd: can't cd to app
+# ls
+# cd shae re
+sh: 10: cd: can't cd to share
+# ls
+# ^C
+# exit
+
+Script done on 2025-08-06 19:09:33+00:00 [COMMAND_EXIT_CODE="130"]
