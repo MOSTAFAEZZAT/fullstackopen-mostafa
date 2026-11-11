@@ -1,4 +1,4 @@
-FROM node:20 AS build-stage
+FROM node:20-alpine AS build-stage
 
 WORKDIR /usr/src/app
 

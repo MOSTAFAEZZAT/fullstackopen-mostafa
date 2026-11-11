@@ -1,6 +1,39 @@
 services:
-  app:                    # The name of the service, can be anything
-    image: todo-img # Declares which image to use
-    build: .              # Declares where to build if image is not found
-    ports:                # Declares the ports to publish
-      - 3000:3000
+  mongo:
+    build:
+      context: .
+      dockerfile: /run/media/mostafa/New Volume/fullstackopen-mostafa/part12/part12-containers-applications/todo-app/todo-backend/mongo/Dockerfile
+    ports:
+      - "3456:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+  server:
+    image: todo-backend-latest    
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      REDIS_URL: redis://redis:6379
+      MONGO_URL: mongodb://root:example@mongo:27017/the_database?authSource=admin
+    depends_on:
+      - mongo
+      - redis
+
+volumes:
+  mongo_data:
+  redis_data:

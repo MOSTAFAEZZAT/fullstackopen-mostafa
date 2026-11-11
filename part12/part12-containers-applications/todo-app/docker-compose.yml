@@ -1,0 +1,29 @@
+name: todo-app-prod
+
+include:
+    - path: ./todo-backend/docker-compose.yml
+services:
+  app:
+    image: hello-front-prod
+    build:
+      context: ./todo-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    container_name: hello-front-root
+ 
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx.Dockerfile
+    ports:
+      - "8080:80"
+    container_name: nginx-1
+    depends_on:
+      - app
+      - server
+
+volumes:
+  mongo_data:
+  redis_data:
+
